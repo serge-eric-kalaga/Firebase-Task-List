@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_list_firebase/models/task.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textEditingController = TextEditingController();
 
-  late List<String> tasks;
+  late List<Task> tasks;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             MaterialStateProperty.all(Colors.black54)),
                     onPressed: () {
                       setState(() {
-                        tasks.add(textEditingController.text);
+                        tasks.add(Task(name: textEditingController.text));
                       });
                     },
                     child: Text("Add task"),
@@ -88,12 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: tasks.length,
                 itemBuilder: (context, index) => ListTile(
                   leading: Checkbox(
-                      value: false,
+                      value: tasks[index].isCompleted,
                       onChanged: (value) {
-                        print(index);
-                        print(value);
+                        setState(() {
+                          tasks[index].isCompleted = value;
+                        });
                       }),
-                  title: Text('${tasks[index]}'),
+                  title: Text('${tasks[index].name}'),
                 ),
               ),
             )
