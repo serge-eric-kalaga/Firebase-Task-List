@@ -29,6 +29,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textEditingController = TextEditingController();
 
+  List<String> tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
         decoration: BoxDecoration(color: Colors.black45),
         child: Column(
-          children: [TaskForm()],
+          children: [TaskForm(), TaskListView(tasks: tasks)],
         ),
       )), // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -71,6 +73,35 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         )
       ],
+    );
+  }
+}
+
+class TaskListView extends StatelessWidget {
+  const TaskListView({
+    super.key,
+    required this.tasks,
+  });
+
+  final List<String> tasks;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+      height: MediaQuery.of(context).size.height * 0.6,
+      child: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) => ListTile(
+          leading: Checkbox(
+              value: false,
+              onChanged: (value) {
+                print(index);
+                print(value);
+              }),
+          title: Text('${tasks[index]}'),
+        ),
+      ),
     );
   }
 }
