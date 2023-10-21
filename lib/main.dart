@@ -27,6 +27,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,38 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
           child: Container(
         decoration: BoxDecoration(color: Colors.black45),
+        child: Column(
+          children: [TaskForm()],
+        ),
       )), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Column TaskForm() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.all(10),
+          width: double.infinity,
+          child: TextField(
+            controller: textEditingController,
+            autocorrect: true,
+            onChanged: (value) {
+              print('Text changed');
+            },
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black54)),
+            onPressed: () {},
+            child: Text("Add task"),
+          ),
+        )
+      ],
     );
   }
 }
