@@ -29,7 +29,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textEditingController = TextEditingController();
 
-  List<String> tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
+  late List<String> tasks;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tasks = [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,66 +49,57 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
         decoration: BoxDecoration(color: Colors.black45),
         child: Column(
-          children: [TaskForm(), TaskListView(tasks: tasks)],
+          children: [
+            Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  margin: EdgeInsets.all(10),
+                  width: double.infinity,
+                  child: TextField(
+                    controller: textEditingController,
+                    autocorrect: true,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.black54)),
+                    onPressed: () {
+                      setState(() {
+                        tasks.add(textEditingController.text);
+                      });
+                    },
+                    child: Text("Add task"),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) => ListTile(
+                  leading: Checkbox(
+                      value: false,
+                      onChanged: (value) {
+                        print(index);
+                        print(value);
+                      }),
+                  title: Text('${tasks[index]}'),
+                ),
+              ),
+            )
+          ],
         ),
       )), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  Column TaskForm() {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.all(10),
-          width: double.infinity,
-          child: TextField(
-            controller: textEditingController,
-            autocorrect: true,
-            onChanged: (value) {
-              print('Text changed');
-            },
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.black54)),
-            onPressed: () {},
-            child: Text("Add task"),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class TaskListView extends StatelessWidget {
-  const TaskListView({
-    super.key,
-    required this.tasks,
-  });
-
-  final List<String> tasks;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(5, 20, 5, 0),
-      height: MediaQuery.of(context).size.height * 0.6,
-      child: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) => ListTile(
-          leading: Checkbox(
-              value: false,
-              onChanged: (value) {
-                print(index);
-                print(value);
-              }),
-          title: Text('${tasks[index]}'),
-        ),
-      ),
     );
   }
 }
